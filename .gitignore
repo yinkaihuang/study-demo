@@ -1,0 +1,5 @@
+# Project exclude paths
+/flink-demo/target/
+/mybatis-demo/target/
+/netty-demo/target/
+/web-sentinel/target/
