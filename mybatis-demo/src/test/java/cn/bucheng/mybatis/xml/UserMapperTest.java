@@ -1,4 +1,4 @@
-package cn.bucheng.mybatis;
+package cn.bucheng.mybatis.xml;
 
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
-public class UserDaoTest {
+public class UserMapperTest {
     InputStream is = null;
     SqlSessionFactory factory = null;
     SqlSession session = null;
@@ -43,9 +43,9 @@ public class UserDaoTest {
 //            System.out.println(user);
 //        }
 
-        List<Object> objects = session.selectList("cn.bucheng.mybatis.dao.UserDao.findLimit");
+        List<Object> objects = session.selectList("cn.bucheng.mybatis.mapper.UserMapper.findLimit");
         System.out.println(objects);
-        List<Object> userList = session.selectList("cn.bucheng.mybatis.dao.UserDao.findAll");
+        List<Object> userList = session.selectList("cn.bucheng.mybatis.mapper.UserMapper.findAll");
         System.out.println(userList);
     }
 
