@@ -46,7 +46,7 @@ public class ResultIntercepts implements Interceptor {
         }
         ArrayList arrayList = (ArrayList) result;
         if (arrayList != null && arrayList.size() >=limit) {
-            throw new RuntimeException("数据过大");
+            throw new RuntimeException("查询的数据过大");
         }
         return arrayList;
     }

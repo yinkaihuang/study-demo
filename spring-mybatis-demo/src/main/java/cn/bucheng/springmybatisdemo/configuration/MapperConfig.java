@@ -5,11 +5,13 @@ import cn.bucheng.springmybatisdemo.pluging.MyResultInterceptor;
 import org.apache.ibatis.session.Configuration;
 import org.mybatis.spring.boot.autoconfigure.ConfigurationCustomizer;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.annotation.Order;
 
 @org.springframework.context.annotation.Configuration
 public class MapperConfig {
     //将插件加入到mybatis插件拦截链中
     @Bean
+    @Order(-Integer.MAX_VALUE)
     public ConfigurationCustomizer configurationCustomizer() {
         return new ConfigurationCustomizer() {
             @Override
