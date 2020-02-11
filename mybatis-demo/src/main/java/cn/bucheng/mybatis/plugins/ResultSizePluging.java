@@ -16,44 +16,32 @@ package cn.bucheng.mybatis.plugins;
  * limitations under the License.
  */
 
-import org.apache.ibatis.executor.statement.StatementHandler;
-import org.apache.ibatis.plugin.*;
-import org.apache.ibatis.session.ResultHandler;
+import org.apache.ibatis.executor.resultset.ResultSetHandler;
+import org.apache.ibatis.plugin.Interceptor;
+import org.apache.ibatis.plugin.Intercepts;
+import org.apache.ibatis.plugin.Invocation;
+import org.apache.ibatis.plugin.Signature;
 
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.Properties;
 
 /**
  * @author yinchong
- * @create 2020/2/11 12:20
+ * @create 2020/2/11 16:46
  * @description
  */
-@Intercepts({
-        @Signature(type = StatementHandler.class, method = "query", args = {Statement.class, ResultHandler.class}),
-        @Signature(type = StatementHandler.class, method = "queryCursor", args = {Statement.class}),
-})
-public class ResultIntercepts implements Interceptor {
+@Intercepts(
+        @Signature(type = ResultSetHandler.class, method = "handleResultSets", args = {Statement.class})
+)
+public class ResultSizePluging implements Interceptor {
     @Override
     public Object intercept(Invocation invocation) throws Throwable {
-        Object result = invocation.proceed();
-        Integer limit = PageIntercepts.getAndRemoveLimit();
-        if (limit == null) {
-            return result;
-        }
-        if (!(result instanceof ArrayList)) {
-            return result;
-        }
-        ArrayList arrayList = (ArrayList) result;
-        if (arrayList != null && arrayList.size() >=limit) {
-            throw new RuntimeException("数据过大");
-        }
-        return arrayList;
+        return null;
     }
 
     @Override
     public Object plugin(Object target) {
-        return Plugin.wrap(target, this);
+        return null;
     }
 
     @Override

@@ -18,37 +18,31 @@ package cn.bucheng.mybatis.plugins;
 
 import org.apache.ibatis.executor.statement.StatementHandler;
 import org.apache.ibatis.plugin.*;
-import org.apache.ibatis.session.ResultHandler;
 
-import java.sql.Statement;
-import java.util.ArrayList;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.Properties;
 
 /**
  * @author yinchong
- * @create 2020/2/11 12:20
+ * @create 2020/2/11 16:43
  * @description
  */
-@Intercepts({
-        @Signature(type = StatementHandler.class, method = "query", args = {Statement.class, ResultHandler.class}),
-        @Signature(type = StatementHandler.class, method = "queryCursor", args = {Statement.class}),
-})
-public class ResultIntercepts implements Interceptor {
+@Intercepts({@Signature(
+        type = StatementHandler.class,//对象类型，只能是四大对象类型
+        method = "prepare", //拦截方法
+        args = {Connection.class, Integer.class/*方法中用到的参数类型*/})})//可以点击拦截对象查看拦截方法的参数，
+public class PreparementPluging implements Interceptor {
     @Override
     public Object intercept(Invocation invocation) throws Throwable {
-        Object result = invocation.proceed();
-        Integer limit = PageIntercepts.getAndRemoveLimit();
-        if (limit == null) {
-            return result;
+        StatementHandler statementHandler = (StatementHandler) invocation.getTarget();
+        if (statementHandler instanceof PreparedStatement) {
+            PreparedStatement ps = (PreparedStatement) statementHandler;
+            ps.setFetchSize(Integer.MIN_VALUE);
+            ps.setFetchDirection(ResultSet.FETCH_REVERSE);
         }
-        if (!(result instanceof ArrayList)) {
-            return result;
-        }
-        ArrayList arrayList = (ArrayList) result;
-        if (arrayList != null && arrayList.size() >=limit) {
-            throw new RuntimeException("数据过大");
-        }
-        return arrayList;
+        return invocation.proceed();
     }
 
     @Override
