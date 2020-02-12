@@ -1,5 +1,9 @@
 package cn.bucheng.mybatis.xml;
 
+import cn.bucheng.mybatis.domain.User;
+import cn.bucheng.mybatis.mapper.UserMapper;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -36,12 +40,12 @@ public class UserMapperTest {
 
     @Test
     public void findAllTest() {
-//        UserDao userDao = session.getMapper(UserDao.class);
-//        PageHelper.startPage(1, 3);
-//       Page<User> page = userDao.pageAll();
-//        for(User user :page.getResult()){
-//            System.out.println(user);
-//        }
+        UserMapper userDao = session.getMapper(UserMapper.class);
+        PageHelper.startPage(1, 3);
+        Page<User> page = userDao.pageAll();
+        for (User user : page.getResult()) {
+            System.out.println(user);
+        }
 
         List<Object> objects = session.selectList("cn.bucheng.mybatis.mapper.UserMapper.findLimit");
         System.out.println(objects);

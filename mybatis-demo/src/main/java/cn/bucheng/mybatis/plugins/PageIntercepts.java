@@ -14,6 +14,8 @@ import java.util.Properties;
         args = {Connection.class, Integer.class/*方法中用到的参数类型*/})})//可以点击拦截对象查看拦截方法的参数，
 public class PageIntercepts implements Interceptor {
 
+    private int defaultSize = 100;
+
    private static ThreadLocal<Integer> defaultLimit = new ThreadLocal<>();
 
     public static Integer getAndRemoveLimit() {
@@ -38,9 +40,9 @@ public class PageIntercepts implements Interceptor {
         if (sql.toLowerCase().contains("limit ")) {
             return invocation.proceed();
         }
-        defaultLimit.set(2);
+        defaultLimit.set(defaultSize);
         //为sql语句添加分页
-        sql += " limit 0,2";
+        sql += " limit 0,"+defaultSize;
         //元数据对象，可以对原始数据进行操作
         MetaObject metaObject = SystemMetaObject.forObject(statementHandler);
         //重新绑定修改后的sql语句
