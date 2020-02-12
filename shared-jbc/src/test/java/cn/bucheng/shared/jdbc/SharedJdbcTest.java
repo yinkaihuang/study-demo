@@ -22,6 +22,7 @@ import org.junit.Test;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.Random;
 
 /**
@@ -30,6 +31,57 @@ import java.util.Random;
  * @description
  */
 public class SharedJdbcTest {
+
+    @Test
+    public void queryAllTest()throws Exception{
+        DataSource dataSource = DataSourceUtils.getDataSource();
+        Connection connection = dataSource.getConnection();
+        String sql = "select * from t_order order by order_id desc limit 0,100";
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+        while(rs.next()){
+            int order_id = rs.getInt("order_id");
+            int user_id = rs.getInt("user_id");
+            System.out.println("order_id:"+order_id+" user_id:"+user_id);
+        }
+
+    }
+
+    @Test
+    public void queryByOrderIdTest()throws Exception{
+        int orderId = 647671;
+        DataSource dataSource = DataSourceUtils.getDataSource();
+        Connection connection = dataSource.getConnection();
+        String sql = "select * from t_order where  order_id = ?";
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setInt(1,orderId);
+        ResultSet rs = ps.executeQuery();
+        while(rs.next()){
+            int order_id = rs.getInt("order_id");
+            int user_id = rs.getInt("user_id");
+            System.out.println("order_id:"+order_id+" user_id:"+user_id);
+        }
+
+    }
+
+    @Test
+    public void queryByOrderIdAndUserIdTest()throws Exception{
+        int orderId = 647671;
+        int userId = 264;
+        DataSource dataSource = DataSourceUtils.getDataSource();
+        Connection connection = dataSource.getConnection();
+        String sql = "select * from t_order where user_id = ? and order_id = ?";
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setInt(1,userId);
+        ps.setInt(2,orderId);
+        ResultSet rs = ps.executeQuery();
+        while(rs.next()){
+            int order_id = rs.getInt("order_id");
+            int user_id = rs.getInt("user_id");
+            System.out.println("order_id:"+order_id+" user_id:"+user_id);
+        }
+
+    }
 
     @Test
     public void saveTest() throws Exception {
