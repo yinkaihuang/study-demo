@@ -29,10 +29,13 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "spring.datasource")
 public class MyDataSourceProperties extends DataSourceProperties {
 
+    public static final String SERVER_TIMEZONE = "serverTimezone";
+    public static final String ASIA_SHANGHAI = "Asia/Shanghai";
+
     @Override
     public void setUrl(String url) {
-        if (!url.contains("serverTimezone")) {
-            String timeZone = "serverTimezone=Asia/Shanghai";
+        if (!url.contains(SERVER_TIMEZONE)) {
+            String timeZone = SERVER_TIMEZONE+"="+ ASIA_SHANGHAI;
             log.info("no find serverTimezone in url,set default timeZone:{}", timeZone);
             if (url.contains("?")) {
                 url += "&" + timeZone;
