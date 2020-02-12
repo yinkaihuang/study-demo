@@ -17,6 +17,8 @@
         <module>mybatis-demo</module>
         <module>shared-jbc</module>
         <module>springboot-shared-jdbc</module>
+        <module>springboot-apollo</module>
+        <module>sentinel-demo</module>
     </modules>
 
 

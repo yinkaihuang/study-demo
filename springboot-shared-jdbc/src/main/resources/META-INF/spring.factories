@@ -1,0 +1,2 @@
+org.springframework.boot.env.EnvironmentPostProcessor=cn.bucheng.shared.jdbc.config.DefaultTimeZoneInit
+#org.springframework.boot.autoconfigure.EnableAutoConfiguration=cn.bucheng.shared.jdbc.config.BeanDefinitionRegister

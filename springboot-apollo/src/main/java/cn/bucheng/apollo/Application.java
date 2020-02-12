@@ -1,4 +1,4 @@
-package cn.bucheng.springmybatisdemo.configuration;
+package cn.bucheng.apollo;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -16,22 +16,23 @@ package cn.bucheng.springmybatisdemo.configuration;
  * limitations under the License.
  */
 
-import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Primary;
+import cn.bucheng.apollo.env.EnvProperties;
+import com.ctrip.framework.apollo.spring.annotation.EnableApolloConfig;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ConfigurableApplicationContext;
 
 /**
  * @author yinchong
- * @create 2020/2/12 10:23
+ * @create 2020/2/12 19:23
  * @description
  */
-//@Configuration
-public class ConfigInit {
-
-    @Bean
-    @Primary
-    public DataSourceProperties dataSourceProperties() {
-        return new MyDataSourceProperties();
+@SpringBootApplication
+@EnableApolloConfig(value = {"application"})
+public class Application {
+    public static void main(String[] args) {
+        ConfigurableApplicationContext applicationContext = SpringApplication.run(Application.class, args);
+        EnvProperties bean = applicationContext.getBean(EnvProperties.class);
+        System.out.println(bean.getValue());
     }
-
 }

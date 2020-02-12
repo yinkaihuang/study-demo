@@ -1,4 +1,4 @@
-package cn.bucheng.springmybatisdemo.configuration;
+package cn.bucheng.apollo.env;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -16,22 +16,22 @@ package cn.bucheng.springmybatisdemo.configuration;
  * limitations under the License.
  */
 
-import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Primary;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 /**
  * @author yinchong
- * @create 2020/2/12 10:23
+ * @create 2020/2/12 19:26
  * @description
  */
-//@Configuration
-public class ConfigInit {
+@Component
+public class EnvProperties {
 
-    @Bean
-    @Primary
-    public DataSourceProperties dataSourceProperties() {
-        return new MyDataSourceProperties();
+    @Value("${spring.datasource.url}")
+    private String value;
+
+    public String getValue() {
+        return value;
     }
 
 }

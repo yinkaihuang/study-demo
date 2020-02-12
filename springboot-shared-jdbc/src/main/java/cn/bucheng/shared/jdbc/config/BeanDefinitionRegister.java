@@ -1,4 +1,4 @@
-package cn.bucheng.springmybatisdemo.configuration;
+package cn.bucheng.shared.jdbc.config;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -16,22 +16,22 @@ package cn.bucheng.springmybatisdemo.configuration;
  * limitations under the License.
  */
 
-import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Primary;
+import org.springframework.beans.factory.support.BeanDefinitionRegistry;
+import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
+import org.springframework.core.type.AnnotationMetadata;
 
 /**
  * @author yinchong
- * @create 2020/2/12 10:23
+ * @create 2020/2/12 14:51
  * @description
  */
-//@Configuration
-public class ConfigInit {
+public class BeanDefinitionRegister implements ImportBeanDefinitionRegistrar {
 
-    @Bean
-    @Primary
-    public DataSourceProperties dataSourceProperties() {
-        return new MyDataSourceProperties();
+    @Override
+    public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
+        String[] beanDefinitionNames = registry.getBeanDefinitionNames();
+        for (String name : beanDefinitionNames) {
+            System.out.println(name);
+        }
     }
-
 }

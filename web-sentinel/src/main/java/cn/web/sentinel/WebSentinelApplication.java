@@ -16,10 +16,18 @@ package cn.web.sentinel;
  * limitations under the License.
  */
 
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
 /**
  * @author yinchong
  * @create 2020/2/3 11:05
  * @description
  */
+@SpringBootApplication
 public class WebSentinelApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(WebSentinelApplication.class, args);
+    }
 }
