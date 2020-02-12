@@ -10,6 +10,7 @@
         <module name="spring-mybatis-demo" />
         <module name="web-sentinel" />
         <module name="flink-demo" />
+        <module name="shared-jbc" />
         <module name="kafka-demo" />
         <module name="mybatis-demo" />
         <module name="gateway-demo" />

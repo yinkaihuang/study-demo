@@ -15,6 +15,7 @@
         <module>web-sentinel</module>
         <module>gateway-sentinel</module>
         <module>mybatis-demo</module>
+        <module>shared-jbc</module>
     </modules>
 
 
