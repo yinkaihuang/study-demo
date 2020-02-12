@@ -56,6 +56,7 @@ public class DataSourceUtils {
         // 将数据库放入到map集合中
         dataSourceMap.put("db0", dataSource1);
         dataSourceMap.put("db1", dataSource2);
+
         // 配置Order表规则
         TableRuleConfiguration orderTableRuleConfig = new TableRuleConfiguration();
         orderTableRuleConfig.setLogicTable("t_order");

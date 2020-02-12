@@ -87,12 +87,14 @@ public class SharedJdbcTest {
     public void saveTest() throws Exception {
         Random random = new Random();
         DataSource dataSource = DataSourceUtils.getDataSource();
-        for (int i = 1; i < 1000; i++) {
+        for (int i = 1; i < 100; i++) {
             Connection conn = dataSource.getConnection();
-            String sql = "insert into t_order(order_id,user_id) values(?,?)";
+            String sql = "insert into t_order(id,order_id,user_id,remark) values(?,?,?,?)";
             PreparedStatement prep = conn.prepareStatement(sql);
-            prep.setInt(1, random.nextInt(10000000));
-            prep.setInt(2, i);
+            prep.setInt(1,i);
+            prep.setInt(2, random.nextInt(10000000));
+            prep.setInt(3, i);
+            prep.setString(4,"this is test for text "+i);
             prep.execute();
             prep.close();
             conn.close();

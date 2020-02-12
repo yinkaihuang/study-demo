@@ -1,0 +1,41 @@
+spring:
+  application:
+    name: shard-jdbc-starter
+mybatis:
+  configuration:
+    #驼峰变为小写和 '_'
+    map-underscore-to-camel-case: true
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: cn.bucheng.shared.jdbc.domain
+sharding:
+  jdbc:
+    datasource:
+      names: db0,db1
+      db0:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.jdbc.Driver
+        url: jdbc:mysql://localhost:3306/db0?serverTimezone=Asia/Shanghai
+        username: root
+        password: 123456
+      db1:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.jdbc.Driver
+        url: jdbc:mysql://localhost:3306/db1?serverTimezone=Asia/Shanghai
+        username: root
+        password: 123456
+    config:
+      sharding:
+        props:
+          sql.show: true
+        tables:
+          t_order:  #t_order表
+            key-generator-column-name: id  #主键
+            actual-data-nodes: db${0..1}.t_order_${0..1}  #数据节点
+            database-strategy:  #分库策略
+              inline:
+                sharding-column: order_id
+                algorithm-expression: db${order_id % 2}
+            table-strategy:  #分表策略
+              inline:
+                sharding-column: user_id
+                algorithm-expression: t_order_{user_id % 2}

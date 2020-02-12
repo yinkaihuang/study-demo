@@ -16,6 +16,7 @@
         <module>gateway-sentinel</module>
         <module>mybatis-demo</module>
         <module>shared-jbc</module>
+        <module>springboot-shared-jdbc</module>
     </modules>
 
 
