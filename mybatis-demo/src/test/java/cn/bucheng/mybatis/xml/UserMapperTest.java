@@ -14,7 +14,6 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
 
 public class UserMapperTest {
     InputStream is = null;
@@ -47,10 +46,10 @@ public class UserMapperTest {
             System.out.println(user);
         }
 
-        List<Object> objects = session.selectList("cn.bucheng.mybatis.mapper.UserMapper.findLimit");
-        System.out.println(objects);
-        List<Object> userList = session.selectList("cn.bucheng.mybatis.mapper.UserMapper.findAll");
-        System.out.println(userList);
+//        List<Object> objects = session.selectList("cn.bucheng.mybatis.mapper.UserMapper.findLimit");
+//        System.out.println(objects);
+//        List<Object> userList = session.selectList("cn.bucheng.mybatis.mapper.UserMapper.findAll");
+//        System.out.println(userList);
     }
 
 }
