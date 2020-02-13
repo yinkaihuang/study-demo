@@ -16,4 +16,10 @@ public class SentinelController {
     public String sentinel() {
         return "sentinel ....";
     }
+
+    @RequestMapping("/hello")
+    @ResponseBody
+    public String hello() {
+        return "hello";
+    }
 }
