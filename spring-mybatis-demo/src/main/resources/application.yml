@@ -1,0 +1,12 @@
+custom:
+  mysql:
+    db0:
+      url: jdbc:mysql://localhost:3306/mybatis_test?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+      className: com.mysql.cj.jdbc.Driver
+      username: root
+      password: 123456
+    db1:
+      url: jdbc:mysql://localhost:3306/db0?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+      className: com.mysql.cj.jdbc.Driver
+      username: root
+      password: 123456
