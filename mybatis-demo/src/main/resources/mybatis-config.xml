@@ -54,6 +54,7 @@
         </environment>
     </environments>
 
+
     <mappers>
         <mapper resource="mapper/UserMapper.xml"/>
     </mappers>

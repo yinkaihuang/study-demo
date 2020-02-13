@@ -19,6 +19,9 @@
         <module>springboot-shared-jdbc</module>
         <module>springboot-apollo</module>
         <module>sentinel-demo</module>
+        <module>springboot-shared-jdbc-wr</module>
+        <module>springboot-shareding-jdbc-much</module>
+        <module>springboot-sharding-much</module>
     </modules>
 
 

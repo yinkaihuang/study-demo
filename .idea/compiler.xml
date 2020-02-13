@@ -6,26 +6,37 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="netty-demo" />
-        <module name="springboot-apollo" />
-        <module name="springboot-shared-jdbc" />
-        <module name="spring-mybatis-demo" />
-        <module name="web-sentinel" />
-        <module name="flink-demo" />
-        <module name="shared-jbc" />
-        <module name="sentinel-demo" />
-        <module name="kafka-demo" />
-        <module name="mybatis-demo" />
-        <module name="gateway-demo" />
         <module name="web-demo" />
+        <module name="shared-jbc" />
+        <module name="spring-mybatis-demo" />
+        <module name="netty-demo" />
+        <module name="springboot-shareding-jdbc-much" />
+        <module name="kafka-demo" />
+        <module name="springboot-shared-jdbc" />
+        <module name="gateway-demo" />
+        <module name="springboot-shareding-much" />
+        <module name="springboot-apollo" />
+        <module name="flink-demo" />
+        <module name="web-sentinel" />
+        <module name="springboot-sharding-much" />
+        <module name="mybatis-demo" />
+        <module name="sentinel-demo" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="springboot-sharding-much" target="1.8" />
+      <module name="springboot-shared-jdbc-wr" target="1.8" />
+      <module name="springboot-shareding-jdbc-much" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="spring-mybatis-demo" options="-parameters" />
       <module name="springboot-apollo" options="-parameters" />
       <module name="springboot-shared-jdbc" options="-parameters" />
+      <module name="springboot-shared-jdbc-wr" options="-parameters" />
+      <module name="springboot-shareding-jdbc-much" options="-parameters" />
+      <module name="springboot-shareding-much" options="-parameters" />
       <module name="web-sentinel" options="-parameters" />
     </option>
   </component>

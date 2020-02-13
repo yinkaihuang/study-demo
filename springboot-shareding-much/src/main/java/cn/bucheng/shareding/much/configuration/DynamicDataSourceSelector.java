@@ -1,4 +1,4 @@
-package cn.bucheng.springmybatisdemo.configuration;
+package cn.bucheng.shareding.much.configuration;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -16,22 +16,22 @@ package cn.bucheng.springmybatisdemo.configuration;
  * limitations under the License.
  */
 
-import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
+import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
+import org.springframework.stereotype.Component;
 
 /**
  * @author yinchong
- * @create 2020/2/12 10:23
+ * @create 2020/2/13 13:06
  * @description
  */
-//@Configuration
-public class ConfigInit {
+@Primary
+@Component
+public class DynamicDataSourceSelector extends AbstractRoutingDataSource {
 
-    @Bean
-    @Primary
-    public DataSourceProperties dataSourceProperties() {
-        return new MyDataSourceProperties();
+    //选择哪个 Key对应的数据源
+    @Override
+    protected Object determineCurrentLookupKey() {
+        return null;
     }
-
 }
