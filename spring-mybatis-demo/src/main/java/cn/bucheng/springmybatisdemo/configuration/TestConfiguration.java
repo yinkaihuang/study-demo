@@ -1,10 +1,4 @@
-package cn.bucheng.springmybatisdemo.annotation;
-
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
+package cn.bucheng.springmybatisdemo.configuration;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -21,11 +15,30 @@ import java.lang.annotation.Target;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-public @interface EnableMuchSource {
-    //配置的前缀，不包含db名称
-    String prefix();
 
-    AloneSource[] value();
+import lombok.Data;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * @author yinchong
+ * @create 2020/2/14 9:06
+ * @description
+ */
+@Data
+@Component
+@ConfigurationProperties(prefix = "yinchong.test")
+public class TestConfiguration {
+    private String name;
+    private Integer age;
+    private List<String> address;
+    private Map<String,String> other;
+
+    public static class TestTemplate{
+        private String test1;
+        private String test2;
+    }
 }

@@ -16,7 +16,7 @@ package cn.bucheng.springmybatisdemo.datasource;
  * limitations under the License.
  */
 
-import cn.bucheng.springmybatisdemo.annotation.EnableMuchSource;
+import cn.bucheng.springmybatisdemo.annotation.EnableMuchDataSource;
 import cn.bucheng.springmybatisdemo.pluging.MyPageInterceptor;
 import cn.bucheng.springmybatisdemo.pluging.MyResultInterceptor;
 import org.apache.ibatis.plugin.Interceptor;
@@ -60,7 +60,7 @@ public class DynamicDataSourceRegister implements ImportBeanDefinitionRegistrar,
     @Override
     public void registerBeanDefinitions(AnnotationMetadata metadata, BeanDefinitionRegistry registry) {
         AnnotationAttributes muchSourceAttr = AnnotationAttributes
-                .fromMap(metadata.getAnnotationAttributes(EnableMuchSource.class.getName()));
+                .fromMap(metadata.getAnnotationAttributes(EnableMuchDataSource.class.getName()));
         if (muchSourceAttr == null) {
             return;
         }
@@ -81,10 +81,8 @@ public class DynamicDataSourceRegister implements ImportBeanDefinitionRegistrar,
         //创建DataSource数据结构
         BeanDefinitionBuilder dataSourceBuilder = BeanDefinitionBuilder.genericBeanDefinition(DataSourceFactory.class);
         dataSourceBuilder.setLazyInit(false);
-        dataSourceBuilder.addPropertyValue("url", environment.getProperty(prefix + "." + dbPrefix + ".url"));
-        dataSourceBuilder.addPropertyValue("className", environment.getProperty(prefix + "." + dbPrefix + ".className"));
-        dataSourceBuilder.addPropertyValue("username", environment.getProperty(prefix + "." + dbPrefix + ".username"));
-        dataSourceBuilder.addPropertyValue("password", environment.getProperty(prefix + "." + dbPrefix + ".password"));
+        dataSourceBuilder.addPropertyValue("dbPrefix", prefix + "." + dbPrefix);
+        dataSourceBuilder.addPropertyValue("environment", environment);
         registry.registerBeanDefinition(dbPrefix + DATA_SOURCE_NAME, dataSourceBuilder.getBeanDefinition());
 
         //创建JdbcTemplate数据结构
@@ -124,7 +122,7 @@ public class DynamicDataSourceRegister implements ImportBeanDefinitionRegistrar,
     /**
      * 构建MapperScan数据结构模拟，mybatis扫描包动作
      *
-     * @param value
+     * @param values
      * @param sqlSessionFactoryRef basePackage
      * @return
      */

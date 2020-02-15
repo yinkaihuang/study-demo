@@ -1,5 +1,8 @@
 package cn.bucheng.springmybatisdemo.annotation;
 
+import cn.bucheng.springmybatisdemo.datasource.DynamicDataSourceRegister;
+import org.springframework.context.annotation.Import;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -22,16 +25,11 @@ import java.lang.annotation.Target;
  * limitations under the License.
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.ANNOTATION_TYPE)
-public @interface AloneSource {
-    //数据前缀
-    String dbPrefix();
+@Target(ElementType.TYPE)
+@Import(DynamicDataSourceRegister.class)
+public @interface EnableMuchDataSource {
+    //配置的前缀，不包含db名称
+    String prefix();
 
-    //别名扫描的包
-    String typeAliasesPackage() default "";
-
-    //mapper文件路径
-    String[] mapperLocations() default {};
-
-    String[] mapperScanPackages();
+    EachDataSource[] value();
 }

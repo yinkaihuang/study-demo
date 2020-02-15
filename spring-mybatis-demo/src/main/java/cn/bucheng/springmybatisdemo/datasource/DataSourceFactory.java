@@ -16,8 +16,12 @@ package cn.bucheng.springmybatisdemo.datasource;
  * limitations under the License.
  */
 
+import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.beans.factory.FactoryBean;
-import org.springframework.boot.jdbc.DataSourceBuilder;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
+import org.springframework.boot.context.properties.bind.BindResult;
+import org.springframework.boot.context.properties.bind.Binder;
+import org.springframework.core.env.Environment;
 
 import javax.sql.DataSource;
 
@@ -27,20 +31,15 @@ import javax.sql.DataSource;
  * @description
  */
 public class DataSourceFactory implements FactoryBean<DataSource> {
-    private String url;
-    private String className;
-    private String username;
-    private String password;
+    private Environment environment;
+    private String dbPrefix;
 
 
     @Override
     public DataSource getObject() throws Exception {
-        DataSourceBuilder builder = DataSourceBuilder.create();
-        builder.url(url);
-        builder.driverClassName(className);
-        builder.username(username);
-        builder.password(password);
-        return builder.build();
+        BindResult<DataSourceProperties> bind = Binder.get(environment).bind(dbPrefix.toLowerCase(), DataSourceProperties.class);
+        DataSourceProperties properties = bind.get();
+        return properties.initializeDataSourceBuilder().type(HikariDataSource.class).build();
     }
 
     @Override
@@ -48,35 +47,19 @@ public class DataSourceFactory implements FactoryBean<DataSource> {
         return DataSource.class;
     }
 
-    public String getUrl() {
-        return url;
+    public Environment getEnvironment() {
+        return environment;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setEnvironment(Environment environment) {
+        this.environment = environment;
     }
 
-    public String getClassName() {
-        return className;
+    public String getDbPrefix() {
+        return dbPrefix;
     }
 
-    public void setClassName(String className) {
-        this.className = className;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
+    public void setDbPrefix(String dbPrefix) {
+        this.dbPrefix = dbPrefix;
     }
 }

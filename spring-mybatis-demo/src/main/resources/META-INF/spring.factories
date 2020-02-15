@@ -1,2 +1,2 @@
 #org.springframework.boot.env.EnvironmentPostProcessor=cn.bucheng.springmybatisdemo.configuration.DefaultTimeZoneInit
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=cn.bucheng.springmybatisdemo.datasource.DynamicDataSourceRegister
+#org.springframework.boot.autoconfigure.EnableAutoConfiguration=cn.bucheng.springmybatisdemo.datasource.DynamicDataSourceRegister

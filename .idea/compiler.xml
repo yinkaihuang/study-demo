@@ -11,14 +11,14 @@
         <module name="spring-mybatis-demo" />
         <module name="netty-demo" />
         <module name="springboot-shareding-jdbc-much" />
+        <module name="gateway-demo" />
         <module name="kafka-demo" />
         <module name="springboot-shared-jdbc" />
-        <module name="gateway-demo" />
+        <module name="springboot-sharding-much" />
         <module name="springboot-shareding-much" />
         <module name="springboot-apollo" />
         <module name="flink-demo" />
         <module name="web-sentinel" />
-        <module name="springboot-sharding-much" />
         <module name="mybatis-demo" />
         <module name="sentinel-demo" />
       </profile>

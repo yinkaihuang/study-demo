@@ -13,7 +13,7 @@ import java.lang.reflect.Field;
 import java.util.LinkedList;
 import java.util.List;
 
-@org.springframework.context.annotation.Configuration
+//@org.springframework.context.annotation.Configuration
 public class MapperConfig {
     //将插件加入到mybatis插件拦截链中
     @Bean
