@@ -1,6 +1,6 @@
 package cn.bucheng.springmybatisdemo.annotation;
 
-import cn.bucheng.springmybatisdemo.datasource.DynamicDataSourceRegister;
+import cn.bucheng.springmybatisdemo.datasource.TkMybatisDataSourceRegister;
 import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.ElementType;
@@ -26,10 +26,14 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-@Import(DynamicDataSourceRegister.class)
+@Import(TkMybatisDataSourceRegister.class)
 public @interface EnableMuchDataSource {
     //配置的前缀，不包含db名称
     String prefix();
 
     EachDataSource[] value();
+
+    String configLocation() default "";
+
+    Class[] plugs() default {};
 }

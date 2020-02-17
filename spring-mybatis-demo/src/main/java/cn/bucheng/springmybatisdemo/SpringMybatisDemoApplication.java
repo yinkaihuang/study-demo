@@ -8,8 +8,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 //@MapperScan("cn.bucheng.springmybatisdemo.mapper")
 @EnableMuchDataSource(prefix = "custom.mysql",value = {
-        @EachDataSource(dbPrefix = "db0",mapperScanPackages = "cn.bucheng.springmybatisdemo.mapper",typeAliasesPackage = "cn.bucheng.springmybatisdemo.domain",mapperLocations = "classpath:mapper/*.xml"),
-        @EachDataSource(dbPrefix = "db1",mapperScanPackages = "cn.bucheng.springmybatisdemo.dao",typeAliasesPackage = "cn.bucheng.springmybatisdemo.entity",mapperLocations = "classpath:mapper2/*.xml")
+        @EachDataSource(dbPrefix = "db0",value = "cn.bucheng.springmybatisdemo.mapper",typeAliasesPackage = "cn.bucheng.springmybatisdemo.domain",mapperLocations = "classpath:mapper/*.xml"),
+        @EachDataSource(dbPrefix = "db1",value = "cn.bucheng.springmybatisdemo.dao",typeAliasesPackage = "cn.bucheng.springmybatisdemo.entity",mapperLocations = "classpath:mapper2/*.xml")
 })
 public class SpringMybatisDemoApplication {
 

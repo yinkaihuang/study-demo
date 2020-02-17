@@ -22,15 +22,18 @@ import cn.bucheng.springmybatisdemo.pluging.MyResultInterceptor;
 import org.apache.ibatis.plugin.Interceptor;
 import org.apache.logging.log4j.util.Strings;
 import org.mybatis.spring.SqlSessionFactoryBean;
-import org.mybatis.spring.mapper.MapperScannerConfigurer;
+import org.mybatis.spring.SqlSessionTemplate;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
+import org.springframework.beans.factory.support.BeanNameGenerator;
 import org.springframework.context.EnvironmentAware;
+import org.springframework.context.ResourceLoaderAware;
 import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
-import org.springframework.core.PriorityOrdered;
 import org.springframework.core.annotation.AnnotationAttributes;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.core.type.AnnotationMetadata;
@@ -38,27 +41,38 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
+import tk.mybatis.spring.mapper.ClassPathMapperScanner;
+import tk.mybatis.spring.mapper.MapperFactoryBean;
 
+import java.lang.annotation.Annotation;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author yinchong
- * @create 2020/2/13 16:00
+ * @create 2020/2/17 19:49
  * @description
  */
-public class DynamicDataSourceRegister implements ImportBeanDefinitionRegistrar, EnvironmentAware, PriorityOrdered {
-
+public class TkMybatisDataSourceRegister implements ImportBeanDefinitionRegistrar, ResourceLoaderAware, EnvironmentAware {
     public static final String DATA_SOURCE_NAME = "dataSource";
     public static final String DATA_SOURCE = "dataSource";
     public static final String JDBC_TEMPLATE = "jdbcTemplate";
-    public static final String SQL_SESSION = "sqlSession";
+    public static final String SQL_SESSION_FACTORY = "sqlSessionFactory";
     public static final String TRANSACTION = "transaction";
-    public static final String MAPPER_SCAN = "mapperScan";
+    public static final String SQL_SESSION_TEMPLATE = "sqlSessionTemplate";
 
     private Environment environment;
+    private ResourceLoader resourceLoader;
+
+    @Override
+    public void setEnvironment(Environment environment) {
+        this.environment = environment;
+    }
+
+    @Override
+    public void setResourceLoader(ResourceLoader resourceLoader) {
+        this.resourceLoader = resourceLoader;
+    }
 
     @Override
     public void registerBeanDefinitions(AnnotationMetadata metadata, BeanDefinitionRegistry registry) {
@@ -68,6 +82,7 @@ public class DynamicDataSourceRegister implements ImportBeanDefinitionRegistrar,
             return;
         }
 
+
         String prefix = muchSourceAttr.getString("prefix");
         String commonConfigLocation = muchSourceAttr.getString("configLocation");
         AnnotationAttributes[] values = (AnnotationAttributes[]) muchSourceAttr.get("value");
@@ -75,17 +90,17 @@ public class DynamicDataSourceRegister implements ImportBeanDefinitionRegistrar,
             String dbPrefix = value.getString("dbPrefix");
             String[] locations = value.getStringArray("mapperLocations");
             String aliasesPackage = value.getString("typeAliasesPackage");
-            String[] mapperScanPackages = value.getStringArray("mapperScanPackages");
             String configLocation = value.getString("configLocation");
             String finalConfigLocation = configLocation;
             if (Strings.isBlank(finalConfigLocation)) {
                 finalConfigLocation = commonConfigLocation;
             }
-            createAndRegisterMapperBean(registry, prefix, dbPrefix, locations, aliasesPackage, mapperScanPackages,finalConfigLocation);
+            createAndRegisterMapperBean(registry, prefix, dbPrefix, locations, aliasesPackage, finalConfigLocation, value);
         }
     }
 
-    private void createAndRegisterMapperBean(BeanDefinitionRegistry registry, String prefix, String dbPrefix, String[] locations, String aliasesPackage, String[] mapperScanPackages,String configLocation) {
+
+    private void createAndRegisterMapperBean(BeanDefinitionRegistry registry, String prefix, String dbPrefix, String[] locations, String aliasesPackage, String configLocation, AnnotationAttributes value) {
         /**创建第一个数据源**/
         //创建DataSource数据结构
         BeanDefinitionBuilder dataSourceBuilder = BeanDefinitionBuilder.genericBeanDefinition(DataSourceFactory.class);
@@ -109,18 +124,23 @@ public class DynamicDataSourceRegister implements ImportBeanDefinitionRegistrar,
             sqlSessionBuilder.addPropertyValue("typeAliasesPackage", aliasesPackage);
         }
 
-        if(!Strings.isBlank(configLocation)){
+        if (!Strings.isBlank(configLocation)) {
             ResourcePatternResolver resolver = (ResourcePatternResolver) new PathMatchingResourcePatternResolver();
             Resource resource = resolver.getResource(configLocation);
-            sqlSessionBuilder.addPropertyValue("configLocation",resource);
+            sqlSessionBuilder.addPropertyValue("configLocation", resource);
         }
 
         if (locations != null && locations.length > 0) {
             sqlSessionBuilder.addPropertyValue("mapperLocations", locations);
         }
-        //
         sqlSessionBuilder.addPropertyReference(DATA_SOURCE, dbPrefix + DATA_SOURCE_NAME);
-        registry.registerBeanDefinition(dbPrefix + SQL_SESSION, sqlSessionBuilder.getBeanDefinition());
+        registry.registerBeanDefinition(dbPrefix + SQL_SESSION_FACTORY, sqlSessionBuilder.getBeanDefinition());
+
+        //创建SqlSession
+        BeanDefinitionBuilder sqlSessionTemplateBuilder = BeanDefinitionBuilder.genericBeanDefinition(SqlSessionTemplate.class);
+        sqlSessionTemplateBuilder.addConstructorArgReference( dbPrefix + SQL_SESSION_FACTORY);
+        registry.registerBeanDefinition(dbPrefix + SQL_SESSION_TEMPLATE, sqlSessionTemplateBuilder.getBeanDefinition());
+
 
         //创建DataSourceTransaction
         BeanDefinitionBuilder transactionBuilder = BeanDefinitionBuilder.genericBeanDefinition(DataSourceTransactionManager.class);
@@ -129,44 +149,68 @@ public class DynamicDataSourceRegister implements ImportBeanDefinitionRegistrar,
         registry.registerBeanDefinition(dbPrefix + TRANSACTION, transactionBuilder.getBeanDefinition());
 
         //构建mapperscan数据结构
-        BeanDefinitionBuilder mapperBuilder = createMapperScan(mapperScanPackages, dbPrefix + SQL_SESSION, new String[]{});
-        registry.registerBeanDefinition(dbPrefix + MAPPER_SCAN, mapperBuilder.getBeanDefinition());
+        buildTkScanner(registry, dbPrefix, value);
     }
 
-
-    /**
-     * 构建MapperScan数据结构模拟，mybatis扫描包动作
-     *
-     * @param values
-     * @param sqlSessionFactoryRef basePackage
-     * @return
-     */
-    BeanDefinitionBuilder createMapperScan(String[] values, String sqlSessionFactoryRef, String[] basePackage) {
-        BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(MapperScannerConfigurer.class);
-        builder.addPropertyValue("processPropertyPlaceHolders", true);
-        List<String> basePackages = new ArrayList<>();
-        //添加value
-        basePackages.addAll(
-                Arrays.stream(values).filter(StringUtils::hasText).collect(Collectors.toList()));
-        basePackages.addAll(Arrays.stream(basePackage).filter(StringUtils::hasText)
-                .collect(Collectors.toList()));
-        basePackages.addAll(Arrays.stream(new String[]{}).map(ClassUtils::getPackageName)
-                .collect(Collectors.toList()));
-        //添加sqlSessionFactoryRef
-        if (StringUtils.hasText(sqlSessionFactoryRef)) {
-            builder.addPropertyValue("sqlSessionFactoryBeanName", sqlSessionFactoryRef);
+    private void buildTkScanner(BeanDefinitionRegistry registry, String dbPrefix, AnnotationAttributes value) {
+        ClassPathMapperScanner scanner = new ClassPathMapperScanner(registry);
+        // this check is needed in Spring 3.1
+        if (resourceLoader != null) {
+            scanner.setResourceLoader(resourceLoader);
         }
-        builder.addPropertyValue("basePackage", StringUtils.collectionToCommaDelimitedString(basePackages));
-        return builder;
-    }
 
-    @Override
-    public int getOrder() {
-        return Integer.MIN_VALUE;
-    }
+        Class<? extends Annotation> annotationClass = value.getClass("annotationClass");
+        if (!Annotation.class.equals(annotationClass)) {
+            scanner.setAnnotationClass(annotationClass);
+        }
 
-    @Override
-    public void setEnvironment(Environment environment) {
-        this.environment = environment;
+        Class<?> markerInterface = value.getClass("markerInterface");
+        if (!Class.class.equals(markerInterface)) {
+            scanner.setMarkerInterface(markerInterface);
+        }
+
+        Class<? extends BeanNameGenerator> generatorClass = value.getClass("nameGenerator");
+        if (!BeanNameGenerator.class.equals(generatorClass)) {
+            scanner.setBeanNameGenerator(BeanUtils.instantiateClass(generatorClass));
+        }
+
+        Class<? extends MapperFactoryBean> mapperFactoryBeanClass = value.getClass("factoryBean");
+        if (!MapperFactoryBean.class.equals(mapperFactoryBeanClass)) {
+            scanner.setMapperFactoryBean(BeanUtils.instantiateClass(mapperFactoryBeanClass));
+        }
+
+        scanner.setSqlSessionTemplateBeanName(dbPrefix + SQL_SESSION_TEMPLATE);
+        scanner.setSqlSessionFactoryBeanName(dbPrefix + SQL_SESSION_FACTORY);
+
+        List<String> basePackages = new ArrayList<String>();
+        for (String pkg : value.getStringArray("value")) {
+            if (StringUtils.hasText(pkg)) {
+                basePackages.add(pkg);
+            }
+        }
+        for (String pkg : value.getStringArray("basePackages")) {
+            if (StringUtils.hasText(pkg)) {
+                basePackages.add(pkg);
+            }
+        }
+        for (Class<?> clazz : value.getClassArray("basePackageClasses")) {
+            basePackages.add(ClassUtils.getPackageName(clazz));
+        }
+        //优先级 mapperHelperRef > properties > springboot
+        String mapperHelperRef = value.getString("mapperHelperRef");
+        String[] properties = value.getStringArray("properties");
+        if (StringUtils.hasText(mapperHelperRef)) {
+            scanner.setMapperHelperBeanName(mapperHelperRef);
+        } else if (properties != null && properties.length > 0) {
+            scanner.setMapperProperties(properties);
+        } else {
+            try {
+                scanner.setMapperProperties(this.environment);
+            } catch (Exception e) {
+
+            }
+        }
+        scanner.registerFilters();
+        scanner.doScan(StringUtils.toStringArray(basePackages));
     }
 }
