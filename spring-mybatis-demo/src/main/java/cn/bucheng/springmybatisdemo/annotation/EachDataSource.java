@@ -33,10 +33,7 @@ public @interface EachDataSource {
     //mapper文件路径
     String[] mapperLocations() default {};
 
-
-    //配置的默认位置
-    String configLocation() default "";
-
+    //mybatis插件配置
     Class[] plugs() default {};
 
     /**

@@ -33,7 +33,6 @@ public @interface EnableMuchDataSource {
 
     EachDataSource[] value();
 
-    String configLocation() default "";
-
+    //mybatis插件
     Class[] plugs() default {};
 }
