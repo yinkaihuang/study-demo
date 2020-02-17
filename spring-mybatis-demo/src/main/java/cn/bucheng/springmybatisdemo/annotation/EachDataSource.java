@@ -86,14 +86,6 @@ public @interface EachDataSource {
     Class<?> markerInterface() default Class.class;
 
     /**
-     * Specifies which {@code SqlSessionTemplate} to use in the case that there is
-     * more than one in the spring context. Usually this is only needed when you
-     * have more than one datasource.
-     */
-    String sqlSessionTemplateRef() default "";
-
-
-    /**
      * Specifies a custom MapperFactoryBean to return a mybatis proxy as spring bean.
      *
      */
