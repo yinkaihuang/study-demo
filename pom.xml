@@ -22,6 +22,7 @@
         <module>springboot-shared-jdbc-wr</module>
         <module>springboot-shareding-jdbc-much</module>
         <module>springboot-sharding-much</module>
+        <module>simple-demo</module>
     </modules>
 
 

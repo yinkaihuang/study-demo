@@ -32,10 +32,7 @@ import org.springframework.context.ResourceLoaderAware;
 import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
 import org.springframework.core.annotation.AnnotationAttributes;
 import org.springframework.core.env.Environment;
-import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
-import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -84,38 +81,50 @@ public class TkMybatisDataSourceRegister implements ImportBeanDefinitionRegistra
 
 
         String prefix = muchSourceAttr.getString("prefix");
-        String commonConfigLocation = muchSourceAttr.getString("configLocation");
         AnnotationAttributes[] values = (AnnotationAttributes[]) muchSourceAttr.get("value");
         for (AnnotationAttributes value : values) {
             String dbPrefix = value.getString("dbPrefix");
             String[] locations = value.getStringArray("mapperLocations");
             String aliasesPackage = value.getString("typeAliasesPackage");
-            String configLocation = value.getString("configLocation");
-            String finalConfigLocation = configLocation;
-            if (Strings.isBlank(finalConfigLocation)) {
-                finalConfigLocation = commonConfigLocation;
-            }
-            createAndRegisterMapperBean(registry, prefix, dbPrefix, locations, aliasesPackage, finalConfigLocation, value);
+            createAndRegisterMapperBean(registry, prefix, dbPrefix, locations, aliasesPackage, value);
         }
     }
 
 
-    private void createAndRegisterMapperBean(BeanDefinitionRegistry registry, String prefix, String dbPrefix, String[] locations, String aliasesPackage, String configLocation, AnnotationAttributes value) {
-        /**创建第一个数据源**/
+    private void createAndRegisterMapperBean(BeanDefinitionRegistry registry, String prefix, String dbPrefix,String[] locations,String aliasesPackage, AnnotationAttributes value) {
         //创建DataSource数据结构
-        BeanDefinitionBuilder dataSourceBuilder = BeanDefinitionBuilder.genericBeanDefinition(DataSourceFactory.class);
-        dataSourceBuilder.setLazyInit(false);
-        dataSourceBuilder.addPropertyValue("dbPrefix", prefix + "." + dbPrefix);
-        dataSourceBuilder.addPropertyValue("environment", environment);
-        registry.registerBeanDefinition(dbPrefix + DATA_SOURCE_NAME, dataSourceBuilder.getBeanDefinition());
+        createAndRegisterDataSource(registry, prefix, dbPrefix);
 
         //创建JdbcTemplate数据结构
-        BeanDefinitionBuilder jdbcBuilder = BeanDefinitionBuilder.genericBeanDefinition(JdbcTemplate.class);
-        jdbcBuilder.setLazyInit(false);
-        jdbcBuilder.addPropertyReference(DATA_SOURCE, dbPrefix + DATA_SOURCE_NAME);
-        registry.registerBeanDefinition(dbPrefix + JDBC_TEMPLATE, jdbcBuilder.getBeanDefinition());
+        createAndRegisterJdbcTemplate(registry, dbPrefix);
 
         //创建SqlSessionFactory数据结构
+        createAndRegisterSqlSessionFactory(registry, dbPrefix,locations, aliasesPackage);
+
+        //创建SqlSession
+        createAndRegisterSqlSessionTemplate(registry, dbPrefix);
+
+        //创建DataSourceTransaction
+        createAndRegisterTransactionManager(registry, dbPrefix);
+
+        //构建mapperscan数据结构
+        buildTkScanner(registry, dbPrefix, value);
+    }
+
+    private void createAndRegisterTransactionManager(BeanDefinitionRegistry registry, String dbPrefix) {
+        BeanDefinitionBuilder transactionBuilder = BeanDefinitionBuilder.genericBeanDefinition(DataSourceTransactionManager.class);
+        transactionBuilder.setLazyInit(false);
+        transactionBuilder.addPropertyReference(DATA_SOURCE, dbPrefix + DATA_SOURCE_NAME);
+        registry.registerBeanDefinition(dbPrefix + TRANSACTION, transactionBuilder.getBeanDefinition());
+    }
+
+    private void createAndRegisterSqlSessionTemplate(BeanDefinitionRegistry registry, String dbPrefix) {
+        BeanDefinitionBuilder sqlSessionTemplateBuilder = BeanDefinitionBuilder.genericBeanDefinition(SqlSessionTemplate.class);
+        sqlSessionTemplateBuilder.addConstructorArgReference( dbPrefix + SQL_SESSION_FACTORY);
+        registry.registerBeanDefinition(dbPrefix + SQL_SESSION_TEMPLATE, sqlSessionTemplateBuilder.getBeanDefinition());
+    }
+
+    private void createAndRegisterSqlSessionFactory(BeanDefinitionRegistry registry, String dbPrefix, String[] locations, String aliasesPackage) {
         BeanDefinitionBuilder sqlSessionBuilder = BeanDefinitionBuilder.genericBeanDefinition(SqlSessionFactoryBean.class);
         sqlSessionBuilder.setLazyInit(false);
         //如果没mapperLocations,则需要xml文件和java文件放在一起
@@ -124,32 +133,32 @@ public class TkMybatisDataSourceRegister implements ImportBeanDefinitionRegistra
             sqlSessionBuilder.addPropertyValue("typeAliasesPackage", aliasesPackage);
         }
 
-        if (!Strings.isBlank(configLocation)) {
-            ResourcePatternResolver resolver = (ResourcePatternResolver) new PathMatchingResourcePatternResolver();
-            Resource resource = resolver.getResource(configLocation);
-            sqlSessionBuilder.addPropertyValue("configLocation", resource);
-        }
+//        if (!Strings.isBlank(configLocation)) {
+//            ResourcePatternResolver resolver = (ResourcePatternResolver) new PathMatchingResourcePatternResolver();
+//            Resource resource = resolver.getResource(configLocation);
+//            sqlSessionBuilder.addPropertyValue("configLocation", resource);
+//        }
 
         if (locations != null && locations.length > 0) {
             sqlSessionBuilder.addPropertyValue("mapperLocations", locations);
         }
         sqlSessionBuilder.addPropertyReference(DATA_SOURCE, dbPrefix + DATA_SOURCE_NAME);
         registry.registerBeanDefinition(dbPrefix + SQL_SESSION_FACTORY, sqlSessionBuilder.getBeanDefinition());
+    }
 
-        //创建SqlSession
-        BeanDefinitionBuilder sqlSessionTemplateBuilder = BeanDefinitionBuilder.genericBeanDefinition(SqlSessionTemplate.class);
-        sqlSessionTemplateBuilder.addConstructorArgReference( dbPrefix + SQL_SESSION_FACTORY);
-        registry.registerBeanDefinition(dbPrefix + SQL_SESSION_TEMPLATE, sqlSessionTemplateBuilder.getBeanDefinition());
+    private void createAndRegisterJdbcTemplate(BeanDefinitionRegistry registry, String dbPrefix) {
+        BeanDefinitionBuilder jdbcBuilder = BeanDefinitionBuilder.genericBeanDefinition(JdbcTemplate.class);
+        jdbcBuilder.setLazyInit(false);
+        jdbcBuilder.addPropertyReference(DATA_SOURCE, dbPrefix + DATA_SOURCE_NAME);
+        registry.registerBeanDefinition(dbPrefix + JDBC_TEMPLATE, jdbcBuilder.getBeanDefinition());
+    }
 
-
-        //创建DataSourceTransaction
-        BeanDefinitionBuilder transactionBuilder = BeanDefinitionBuilder.genericBeanDefinition(DataSourceTransactionManager.class);
-        transactionBuilder.setLazyInit(false);
-        transactionBuilder.addPropertyReference(DATA_SOURCE, dbPrefix + DATA_SOURCE_NAME);
-        registry.registerBeanDefinition(dbPrefix + TRANSACTION, transactionBuilder.getBeanDefinition());
-
-        //构建mapperscan数据结构
-        buildTkScanner(registry, dbPrefix, value);
+    private void createAndRegisterDataSource(BeanDefinitionRegistry registry, String prefix, String dbPrefix) {
+        BeanDefinitionBuilder dataSourceBuilder = BeanDefinitionBuilder.genericBeanDefinition(DataSourceFactory.class);
+        dataSourceBuilder.setLazyInit(false);
+        dataSourceBuilder.addPropertyValue("dbPrefix", prefix + "." + dbPrefix);
+        dataSourceBuilder.addPropertyValue("environment", environment);
+        registry.registerBeanDefinition(dbPrefix + DATA_SOURCE_NAME, dataSourceBuilder.getBeanDefinition());
     }
 
     private void buildTkScanner(BeanDefinitionRegistry registry, String dbPrefix, AnnotationAttributes value) {

@@ -16,6 +16,7 @@
         <module name="springboot-shared-jdbc" />
         <module name="springboot-sharding-much" />
         <module name="springboot-shareding-much" />
+        <module name="simple-demo" />
         <module name="springboot-apollo" />
         <module name="flink-demo" />
         <module name="web-sentinel" />
