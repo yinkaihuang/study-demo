@@ -13,6 +13,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.env.ConfigurableEnvironment;
 
+import java.util.List;
+
 @SpringBootTest
 class SpringMybatisDemoApplicationTests {
     @Autowired
@@ -37,6 +39,9 @@ class SpringMybatisDemoApplicationTests {
         PageHelper.startPage(1, 20);
         Page<UserEntity> userRecord = userDao.pageAll();
         System.out.println(userRecord.getResult());
+
+        List<User> all = userMapper.findAll();
+        System.out.println(all);
 
 
 //        List<User> userList = userMapper.findLimit();

@@ -1,7 +1,6 @@
 package cn.bucheng.springmybatisdemo.configuration;
 
 import cn.bucheng.springmybatisdemo.pluging.MyPageInterceptor;
-import cn.bucheng.springmybatisdemo.pluging.MyResultInterceptor;
 import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.plugin.InterceptorChain;
 import org.apache.ibatis.session.Configuration;
@@ -23,24 +22,20 @@ public class MapperConfig {
             @Override
             public void customize(Configuration configuration) {
                 //保证myPlugin1和myPlugin2优先级最低
-                MyPageInterceptor myPagePlug = new MyPageInterceptor();
-                MyResultInterceptor resultPlug = new MyResultInterceptor();
+                MyPageInterceptor myplug = new MyPageInterceptor();
                 try {
                     Field field = Configuration.class.getDeclaredField("interceptorChain");
                     field.setAccessible(true);
                     InterceptorChain chainList = (InterceptorChain) field.get(configuration);
                     List<Interceptor> interceptors = chainList.getInterceptors();
                     LinkedList<Interceptor> tempList = new LinkedList<>();
-                    tempList.add(myPagePlug);
-                    tempList.add(resultPlug);
+                    tempList.add(myplug);
                     tempList.addAll(interceptors);
                     Field chainField = InterceptorChain.class.getDeclaredField("interceptors");
                     chainField.setAccessible(true);
                     List<Interceptor> interceptorList = (List<Interceptor>) chainField.get(chainList);
                     interceptorList.clear();
-                    for (Interceptor temp : tempList) {
-                        interceptorList.add(temp);
-                    }
+                    interceptorList.addAll(tempList);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }

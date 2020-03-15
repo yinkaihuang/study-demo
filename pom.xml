@@ -10,6 +10,7 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>kafka-demo</module>
+        <module>lettuce-demo</module>
         <module>netty-demo</module>
         <module>flink-demo</module>
         <module>web-sentinel</module>
@@ -19,10 +20,10 @@
         <module>springboot-shared-jdbc</module>
         <module>springboot-apollo</module>
         <module>sentinel-demo</module>
-        <module>springboot-shared-jdbc-wr</module>
-        <module>springboot-shareding-jdbc-much</module>
-        <module>springboot-sharding-much</module>
         <module>simple-demo</module>
+        <module>webflux-demo</module>
+        <module>reactive-redis</module>
+        <module>asm-demo</module>
     </modules>
 
 

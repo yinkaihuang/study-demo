@@ -18,7 +18,6 @@ package cn.bucheng.springmybatisdemo.datasource;
 
 import cn.bucheng.springmybatisdemo.annotation.EnableMuchDataSource;
 import cn.bucheng.springmybatisdemo.pluging.MyPageInterceptor;
-import cn.bucheng.springmybatisdemo.pluging.MyResultInterceptor;
 import org.apache.ibatis.plugin.Interceptor;
 import org.apache.logging.log4j.util.Strings;
 import org.mybatis.spring.SqlSessionFactoryBean;
@@ -128,7 +127,7 @@ public class TkMybatisDataSourceRegister implements ImportBeanDefinitionRegistra
         BeanDefinitionBuilder sqlSessionBuilder = BeanDefinitionBuilder.genericBeanDefinition(SqlSessionFactoryBean.class);
         sqlSessionBuilder.setLazyInit(false);
         //如果没mapperLocations,则需要xml文件和java文件放在一起
-        sqlSessionBuilder.addPropertyValue("plugins", new Interceptor[]{new MyPageInterceptor(), new MyResultInterceptor()});
+        sqlSessionBuilder.addPropertyValue("plugins", new Interceptor[]{new MyPageInterceptor()});
         if (!Strings.isBlank(aliasesPackage)) {
             sqlSessionBuilder.addPropertyValue("typeAliasesPackage", aliasesPackage);
         }

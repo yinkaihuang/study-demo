@@ -1,4 +1,4 @@
-package cn.bucheng.springmybatisdemo.test;
+package cn.bucheng.simple.email;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -16,24 +16,13 @@ package cn.bucheng.springmybatisdemo.test;
  * limitations under the License.
  */
 
+import java.util.List;
+
 /**
  * @author yinchong
- * @create 2020/2/19 20:13N
+ * @create 2020/2/26 20:55
  * @description
  */
-public class Test {
-
-    public static void main(String[] args) {
-//        IDCard idCard = IDCard.builder().date(new Date()).idCard("test_123").build();
-//        Student student = Student.builder().gender("男").name("银从").idCard(idCard).build();
-//        MetaObject metaObject = SystemMetaObject.forObject(student);
-//        metaObject.setValue("idCard.idCard","hello_123");
-//        System.out.println(idCard);
-
-        String value = "123.22";
-        if(value.contains(".")) {
-            int index = value.indexOf(".");
-            System.out.println(value.substring(0, index));
-        }
-    }
+public interface EamilSearch {
+    List<Email> search();
 }
