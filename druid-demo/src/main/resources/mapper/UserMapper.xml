@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.bucheng.druid.mapper.OrderMapper">
+    <insert id="save">
+        insert into t_order(id,order_id,detail) value(#{id},#{orderId},#{detail})
+    </insert>
+    <update id="updateById">
+        update t_order set order_id = #{orderId},detail =#{detail} where id =#{id}
+    </update>
+
+    <select id="listAll" resultType="order">
+        SELECT * FROM t_order
+    </select>
+    <select id="errorList" resultType="order">
+        select * from t_order2
+    </select>
+
+
+</mapper>

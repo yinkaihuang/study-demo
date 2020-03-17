@@ -33,7 +33,7 @@ public class ASMTest {
         String fullName = Demo.class.getName();
         String fullNameType = fullName.replace(".", "/");
         ClassReader reader = new ClassReader(fullNameType);
-        ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_FRAMES);
+        ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_FRAMES );
         ClassVisitor visitor = new ClassVisitor(Opcodes.ASM7, writer) {
             @Override
             public MethodVisitor visitMethod(int access, String name, String descriptor, String signature, String[] exceptions) {
@@ -45,11 +45,41 @@ public class ASMTest {
                     @Override
                     public void visitCode() {
                         //在原来方法执行后添加方法，正常
-                        injectMethodAfter();
+//                        injectMethodAfter();
                         //在原来方法执行前动态插入方法，报错
-//                        injectMethodBefore();
+                        injectMethodBefore();
                         //想在方法执行前面后台就，报错
 //                        injectMethodBeforeAndAfter();
+
+//                        injectSelf();
+                    }
+
+                    private void injectSelf() {
+                        Label label0 = new Label();
+                        methodVisitor.visitLabel(label0);
+                        methodVisitor.visitLineNumber(8, label0);
+                        methodVisitor.visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
+                        methodVisitor.visitTypeInsn(NEW, "java/lang/StringBuilder");
+                        methodVisitor.visitInsn(DUP);
+                        methodVisitor.visitMethodInsn(INVOKESPECIAL, "java/lang/StringBuilder", "<init>", "()V", false);
+                        methodVisitor.visitLdcInsn("getDemoInfo\u88ab\u8c03\u7528...:");
+                        methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "java/lang/StringBuilder", "append", "(Ljava/lang/String;)Ljava/lang/StringBuilder;", false);
+                        methodVisitor.visitVarInsn(ALOAD, 1);
+                        methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "java/lang/StringBuilder", "append", "(Ljava/lang/String;)Ljava/lang/StringBuilder;", false);
+                        methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "java/lang/StringBuilder", "toString", "()Ljava/lang/String;", false);
+                        methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "println", "(Ljava/lang/String;)V", false);
+
+
+                        Label label1 = new Label();
+                        methodVisitor.visitLabel(label1);
+                        methodVisitor.visitLineNumber(9, label1);
+                        methodVisitor.visitInsn(RETURN);
+                        Label label2 = new Label();
+                        methodVisitor.visitLabel(label2);
+                        methodVisitor.visitLocalVariable("this", "Lcn/bucheng/asm/update/test1/Demo;", null, label0, label2, 0);
+                        methodVisitor.visitLocalVariable("name", "Ljava/lang/String;", null, label0, label2, 1);
+                        methodVisitor.visitMaxs(3, 2);
+                        methodVisitor.visitEnd();
                     }
 
                     private void injectMethodBefore() {
@@ -58,6 +88,7 @@ public class ASMTest {
                         methodVisitor.visitLineNumber(8, label0);
                         methodVisitor.visitVarInsn(ALOAD, 1);
                         methodVisitor.visitMethodInsn(INVOKESTATIC, "cn/bucheng/asm/update/test1/Logger", "beforeMethod", "(Ljava/lang/String;)V", false);
+
                         Label label1 = new Label();
                         methodVisitor.visitLabel(label1);
                         methodVisitor.visitLineNumber(9, label1);
@@ -71,14 +102,17 @@ public class ASMTest {
                         methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "java/lang/StringBuilder", "append", "(Ljava/lang/String;)Ljava/lang/StringBuilder;", false);
                         methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "java/lang/StringBuilder", "toString", "()Ljava/lang/String;", false);
                         methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "println", "(Ljava/lang/String;)V", false);
+
                         Label label2 = new Label();
                         methodVisitor.visitLabel(label2);
                         methodVisitor.visitLineNumber(11, label2);
                         methodVisitor.visitInsn(RETURN);
+
                         Label label3 = new Label();
                         methodVisitor.visitLabel(label3);
                         methodVisitor.visitLocalVariable("this", "Lcn/bucheng/asm/update/test1/Demo;", null, label0, label3, 0);
                         methodVisitor.visitLocalVariable("name", "Ljava/lang/String;", null, label0, label3, 1);
+
                         methodVisitor.visitMaxs(3, 2);
                         methodVisitor.visitEnd();
                     }
@@ -153,14 +187,14 @@ public class ASMTest {
             }
         };
 
-        reader.accept(visitor, ClassReader.SKIP_DEBUG);
+        reader.accept(visitor, ClassReader.EXPAND_FRAMES);
         byte[] bytes = writer.toByteArray();
 
         MyClassLoader classLoader = new MyClassLoader();
         Class<?> cls = classLoader.definePublicClass(fullName, bytes, 0);
         Object o = cls.newInstance();
-        Method getDemoInfo = cls.getMethod("getDemoInfo",String.class);
-        getDemoInfo.invoke(o,"yinchong");
+        Method getDemoInfo = cls.getMethod("getDemoInfo", String.class);
+        getDemoInfo.invoke(o, "yinchong");
 
     }
 }
