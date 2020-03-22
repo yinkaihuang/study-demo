@@ -17,6 +17,9 @@
     <select id="errorList" resultType="order">
         select * from t_order2
     </select>
+    <select id="findById" resultType="order">
+        select * from t_order where id = #{id}
+    </select>
 
 
 </mapper>

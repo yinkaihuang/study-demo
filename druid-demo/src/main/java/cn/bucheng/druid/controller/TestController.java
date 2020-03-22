@@ -16,6 +16,7 @@ package cn.bucheng.druid.controller;
  * limitations under the License.
  */
 
+import cn.bucheng.druid.core.DruidMonitorService;
 import com.alibaba.druid.stat.DruidStatService;
 import org.springframework.beans.factory.BeanNameAware;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,6 +33,8 @@ public class TestController implements BeanNameAware {
 
 
     public static final String SQL_QUERY_DETAIL = "/sql.json?orderBy=SQL&orderType=desc&page=1&perPageCount=1000000&";
+    public static final String REST_ALL = "/reset-all.json";
+    public static final String WALL_JSON = "/wall.json";
 
     @RequestMapping("hello")
     public Object hello() {
@@ -47,5 +50,22 @@ public class TestController implements BeanNameAware {
     public Object show() {
         String service = DruidStatService.getInstance().service(SQL_QUERY_DETAIL);
         return service;
+    }
+
+    @RequestMapping("rest")
+    public Object reset() {
+        return DruidStatService.getInstance().service(REST_ALL);
+    }
+
+
+    @RequestMapping("wall")
+    public Object wall(){
+        return DruidStatService.getInstance().service(WALL_JSON);
+    }
+
+
+    @RequestMapping("reportAndClear")
+    public Object reportAndClear(){
+        return DruidMonitorService.getInstance().reportMonitor();
     }
 }

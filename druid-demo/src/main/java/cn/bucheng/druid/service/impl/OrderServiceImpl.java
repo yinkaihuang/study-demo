@@ -33,6 +33,7 @@ import java.util.List;
 public class OrderServiceImpl implements OrderService {
     @Autowired
     private OrderMapper orderMapper;
+
     @Override
     public void addOrder(Order order) {
         orderMapper.save(order);
@@ -46,5 +47,10 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<Order> errorList() {
         return orderMapper.errorList();
+    }
+
+    @Override
+    public Order findById(Long id) {
+        return orderMapper.findById(id);
     }
 }

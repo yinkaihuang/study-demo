@@ -16,7 +16,10 @@ package cn.bucheng.druid.domain;
  * limitations under the License.
  */
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.apache.ibatis.type.Alias;
 
 import java.io.Serializable;
@@ -28,6 +31,9 @@ import java.io.Serializable;
  */
 @Alias("order")
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Order implements Serializable {
     private Long id;
     private Long orderId;

@@ -21,6 +21,7 @@ public class DruidDataSourceWrapper extends DruidDataSource implements Initializ
 
     @Override
     public void afterPropertiesSet() throws Exception {
+//        super.setStatLogger(new KafkaDruidDataSourceHandler());
         //if not found prefix 'spring.datasource.druid' jdbc properties ,'spring.datasource' prefix jdbc properties will be used.
         if (super.getUsername() == null) {
             super.setUsername(basicProperties.determineUsername());
@@ -37,10 +38,14 @@ public class DruidDataSourceWrapper extends DruidDataSource implements Initializ
 
     }
 
+
+
     @Autowired(required = false)
     public void addStatFilter(StatFilter statFilter) {
         super.filters.add(statFilter);
     }
+
+
 
     @Autowired(required = false)
     public void addConfigFilter(ConfigFilter configFilter) {

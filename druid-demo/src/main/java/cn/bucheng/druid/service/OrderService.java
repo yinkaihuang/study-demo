@@ -24,4 +24,5 @@ public interface OrderService {
     void addOrder(Order order);
     List<Order> listAll();
     List<Order> errorList();
+    Order findById(Long id);
 }

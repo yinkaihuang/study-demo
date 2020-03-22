@@ -16,25 +16,24 @@ package cn.bucheng.druid.core;
  * limitations under the License.
  */
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.context.EnvironmentAware;
+import org.springframework.core.env.Environment;
 
 /**
  * @author yinchong
- * @create 2020/3/17 20:31
+ * @create 2020/3/19 13:29
  * @description
  */
-@Configuration
-public class AutoDruidDataSourceConfiguration {
+//@Component
+public class EnviromentUtils implements EnvironmentAware {
+    private static Environment environment;
 
-    @Bean
-    public EnviromentUtils enviromentUtils(){
-        return new EnviromentUtils();
+    @Override
+    public void setEnvironment(Environment environment) {
+        EnviromentUtils.environment = environment;
     }
 
-    @Bean
-    public DruidDataSourceInitBeanPostProcessor beanPostProcessor(){
-        return new DruidDataSourceInitBeanPostProcessor();
+    public static String getValue(String key){
+        return environment.getProperty(key);
     }
-
 }

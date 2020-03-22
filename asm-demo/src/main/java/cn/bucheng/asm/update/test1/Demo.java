@@ -5,6 +5,6 @@ package cn.bucheng.asm.update.test1;
  */
 public class Demo {
     public void getDemoInfo(String name) {
-        System.out.println("getDemoInfo被调用...:"+name);
+        System.out.println("getDemoInfo被调用...:" + name);
     }
 }

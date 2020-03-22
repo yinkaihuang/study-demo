@@ -1,4 +1,4 @@
-package cn.bucheng.druid.core;
+package cn.bucheng.druid.core.test;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -16,25 +16,17 @@ package cn.bucheng.druid.core;
  * limitations under the License.
  */
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import lombok.Data;
+
+import java.util.List;
 
 /**
  * @author yinchong
- * @create 2020/3/17 20:31
+ * @create 2020/3/19 14:48
  * @description
  */
-@Configuration
-public class AutoDruidDataSourceConfiguration {
-
-    @Bean
-    public EnviromentUtils enviromentUtils(){
-        return new EnviromentUtils();
-    }
-
-    @Bean
-    public DruidDataSourceInitBeanPostProcessor beanPostProcessor(){
-        return new DruidDataSourceInitBeanPostProcessor();
-    }
-
+@Data
+public class MonitorInfo {
+    private String sysIdentify;
+    private List<LogInfo> LogInfos;
 }

@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: druid-test
   datasource:
     name: druidDataSource
     type: com.alibaba.druid.pool.DruidDataSource

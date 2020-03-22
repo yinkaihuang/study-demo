@@ -1,4 +1,4 @@
-package cn.bucheng.druid.core;
+package cn.bucheng.druid.core.test;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -16,25 +16,35 @@ package cn.bucheng.druid.core;
  * limitations under the License.
  */
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import lombok.Data;
+
+import java.util.Date;
 
 /**
  * @author yinchong
- * @create 2020/3/17 20:31
+ * @create 2020/3/19 14:41
  * @description
  */
-@Configuration
-public class AutoDruidDataSourceConfiguration {
-
-    @Bean
-    public EnviromentUtils enviromentUtils(){
-        return new EnviromentUtils();
-    }
-
-    @Bean
-    public DruidDataSourceInitBeanPostProcessor beanPostProcessor(){
-        return new DruidDataSourceInitBeanPostProcessor();
-    }
-
+@Data
+public class LogInfo {
+    private String sql;
+    private String sqlParam;
+    private Long executeMillisMax;
+    private Integer maxParallel;
+    private Long executeMillisTotal;
+    private Long executeCount;
+    private Long executeErrorCount;
+    private Date maxOccurTime;
+    private Long his_0_1;
+    private Long his_1_10;
+    private Integer his_10_100;
+    private Integer his_100_1000;
+    private Integer his_1000_10000;
+    private Integer his_10000_100000;
+    private Integer his_100000_1000000;
+    private Integer his_1000000_more;
+    private String lastErrorClass;
+    private String lastErrorMessage;
+    private String lastErrorStackTrace;
+    private Date lastErrorTime;
 }
