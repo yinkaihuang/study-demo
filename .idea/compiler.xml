@@ -13,11 +13,11 @@
         <module name="springboot-shareding-jdbc-much" />
         <module name="webflux-demo" />
         <module name="lettuce-demo" />
+        <module name="gateway-demo" />
         <module name="kafka-demo" />
         <module name="springboot-shared-jdbc" />
         <module name="mybatis-demo" />
         <module name="springboot-sharding-much" />
-        <module name="hight-es-client" />
         <module name="springboot-shareding-much" />
         <module name="asm-demo" />
         <module name="springboot-apollo" />
@@ -25,7 +25,7 @@
         <module name="flink-demo" />
         <module name="reactive-redis" />
         <module name="web-sentinel" />
-        <module name="gateway-demo" />
+        <module name="hight-es-client" />
         <module name="druid-demo" />
         <module name="sentinel-demo" />
       </profile>
