@@ -34,6 +34,7 @@ public class ServiceMonitorDTO {
     private String app;
     private String url;
     private String method;
+    private Long time;
     private Integer error;
     private Integer success;
 }
