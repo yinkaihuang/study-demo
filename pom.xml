@@ -25,6 +25,7 @@
         <module>reactive-redis</module>
         <module>asm-demo</module>
         <module>druid-demo</module>
+        <module>hight-es-client</module>
     </modules>
 
 

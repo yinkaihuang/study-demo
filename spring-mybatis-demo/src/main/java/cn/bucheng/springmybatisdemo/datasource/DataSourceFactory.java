@@ -16,7 +16,7 @@ package cn.bucheng.springmybatisdemo.datasource;
  * limitations under the License.
  */
 
-import com.zaxxer.hikari.HikariDataSource;
+import com.alibaba.druid.pool.DruidDataSource;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.context.properties.bind.BindResult;
@@ -39,7 +39,7 @@ public class DataSourceFactory implements FactoryBean<DataSource> {
     public DataSource getObject() throws Exception {
         BindResult<DataSourceProperties> bind = Binder.get(environment).bind(dbPrefix.toLowerCase(), DataSourceProperties.class);
         DataSourceProperties properties = bind.get();
-        return properties.initializeDataSourceBuilder().type(HikariDataSource.class).build();
+        return properties.initializeDataSourceBuilder().type(DruidDataSource.class).build();
     }
 
     @Override

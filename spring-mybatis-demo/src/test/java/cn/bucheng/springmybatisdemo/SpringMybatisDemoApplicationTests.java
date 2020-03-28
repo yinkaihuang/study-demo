@@ -1,6 +1,5 @@
 package cn.bucheng.springmybatisdemo;
 
-import cn.bucheng.springmybatisdemo.configuration.TestConfiguration;
 import cn.bucheng.springmybatisdemo.dao.UserDao;
 import cn.bucheng.springmybatisdemo.domain.User;
 import cn.bucheng.springmybatisdemo.entity.UserEntity;
@@ -10,10 +9,6 @@ import com.github.pagehelper.PageHelper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.ApplicationContext;
-import org.springframework.core.env.ConfigurableEnvironment;
-
-import java.util.List;
 
 @SpringBootTest
 class SpringMybatisDemoApplicationTests {
@@ -21,12 +16,6 @@ class SpringMybatisDemoApplicationTests {
     private UserMapper userMapper;
     @Autowired
     private UserDao userDao;
-    @Autowired
-    private TestConfiguration testConfiguration;
-    @Autowired
-    private ConfigurableEnvironment environment;
-    @Autowired
-    private ApplicationContext applicationContext;
 
     @Test
     void contextLoads() {
@@ -40,8 +29,8 @@ class SpringMybatisDemoApplicationTests {
         Page<UserEntity> userRecord = userDao.pageAll();
         System.out.println(userRecord.getResult());
 
-        List<User> all = userMapper.findAll();
-        System.out.println(all);
+//        List<User> all = userMapper.findAll();
+//        System.out.println(all);
 
 
 //        List<User> userList = userMapper.findLimit();

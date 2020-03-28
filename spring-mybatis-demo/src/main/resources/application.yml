@@ -1,24 +1,23 @@
 custom:
   mysql:
     db0:
+      type: com.alibaba.druid.pool.DruidDataSource
       url: jdbc:mysql://localhost:3306/mybatis_test?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
       driverClassName: com.mysql.cj.jdbc.Driver
       username: root
       password: 123456
     db1:
+      type: com.alibaba.druid.pool.DruidDataSource
       url: jdbc:mysql://localhost:3306/db0?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
       driverClassName: com.mysql.cj.jdbc.Driver
       username: root
       password: 123456
 
-yinchong:
-  testName:
-    name: hello
-    age: 20
-    address:
-      - 武汉
-      - 北京
-      - 天津
-    other:
-      name: yinchong
-      age: 200
+spring:
+  application:
+    name: mybatis-druid-test
+
+server:
+  port: 8090
+  servlet:
+    context-path: /

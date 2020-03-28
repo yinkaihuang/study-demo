@@ -12,7 +12,7 @@
     </update>
 
     <select id="listAll" resultType="order">
-        SELECT * FROM t_order
+        SELECT * FROM db_test.t_order
     </select>
     <select id="errorList" resultType="order">
         select * from t_order2

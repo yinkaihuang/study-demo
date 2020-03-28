@@ -17,6 +17,7 @@
         <module name="springboot-shared-jdbc" />
         <module name="mybatis-demo" />
         <module name="springboot-sharding-much" />
+        <module name="hight-es-client" />
         <module name="springboot-shareding-much" />
         <module name="asm-demo" />
         <module name="springboot-apollo" />

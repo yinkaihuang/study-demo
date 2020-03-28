@@ -32,9 +32,7 @@ import java.util.List;
 @Component
 public class DruidDataSourceInitBeanPostProcessor implements BeanPostProcessor {
 
-    //com.alibaba.druid.filter.stat.StatFilter
-    //com.alibaba.druid.wall.WallFilter
-    //com.alibaba.druid.filter.logging.Slf4jLogFilter
+
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
         if(bean instanceof DruidDataSource){
