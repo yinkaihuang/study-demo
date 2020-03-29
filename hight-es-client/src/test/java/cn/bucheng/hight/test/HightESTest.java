@@ -258,7 +258,7 @@ public class HightESTest {
                 .minDocCount(1)
                 .subAggregation(errorSumAggr)
                 .subAggregation(successSumAggr);
-
+        System.out.println(searchBuilder);
         SearchRequest request = new SearchRequest();
         request.source(searchBuilder);
 
