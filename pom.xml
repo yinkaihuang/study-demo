@@ -32,6 +32,7 @@
         <module>mvc-learn</module>
         <module>simple-learn</module>
         <module>apollo-learn</module>
+        <module>netty-gateway-learn</module>
     </modules>
 
 

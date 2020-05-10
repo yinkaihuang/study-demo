@@ -34,6 +34,7 @@
         <module name="netty-learn" />
         <module name="kafka-learn" />
         <module name="hystrix-learn" />
+        <module name="netty-gateway-learn" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
