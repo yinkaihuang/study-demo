@@ -12,21 +12,21 @@
     <artifactId>feign-learn</artifactId>
 
     <dependencies>
-        <!-- https://mvnrepository.com/artifact/io.github.openfeign/feign-core -->
+
         <dependency>
             <groupId>io.github.openfeign</groupId>
             <artifactId>feign-core</artifactId>
             <version>11.0</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/io.github.openfeign/feign-gson -->
+
         <dependency>
             <groupId>io.github.openfeign</groupId>
             <artifactId>feign-gson</artifactId>
             <version>11.0</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
+
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -34,20 +34,20 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/io.github.openfeign/feign-hystrix -->
+
         <dependency>
             <groupId>io.github.openfeign</groupId>
             <artifactId>feign-hystrix</artifactId>
             <version>11.0</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/io.github.openfeign/feign-ribbon -->
+
         <dependency>
             <groupId>io.github.openfeign</groupId>
             <artifactId>feign-ribbon</artifactId>
             <version>11.0</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/junit/junit -->
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
