@@ -18,7 +18,7 @@ import io.netty.handler.timeout.IdleStateHandler;
  * @create 2020/4/26 21:10
  * @description
  */
-public class FastGatewayBootStrap {
+public class FastGatewayBootstrap {
 
     public void start(int port) {
         //bossGroup专门用于建立client到proxy连接

@@ -2,7 +2,7 @@ package cn.bucheng.gateway.client;
 
 import cn.bucheng.gateway.model.SafeLinkedList;
 import cn.bucheng.gateway.server.ProxyToServerChannelHandler;
-import cn.bucheng.gateway.util.ResponseUtil;
+import cn.bucheng.gateway.util.ResponseUtils;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.socket.nio.NioSocketChannel;
@@ -98,7 +98,7 @@ public class ClientToProxyChannelHandler extends SimpleChannelInboundHandler<Ful
             IdleStateEvent event = (IdleStateEvent) evt;
             switch (event.state()) {
                 case ALL_IDLE:
-                    ctx.channel().writeAndFlush(ResponseUtil.timeOut());
+                    ctx.channel().writeAndFlush(ResponseUtils.timeOut());
                     break;
             }
         }
