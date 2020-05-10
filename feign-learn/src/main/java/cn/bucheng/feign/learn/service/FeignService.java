@@ -16,6 +16,7 @@ package cn.bucheng.feign.learn.service;
  * limitations under the License.
  */
 
+import feign.Param;
 import feign.RequestLine;
 
 import java.util.Map;
@@ -30,6 +31,6 @@ public interface FeignService {
     @RequestLine("GET /test")
     Map<String,Object> test();
 
-    @RequestLine("GET /timeout")
-    Map<String,Object> timeout(Integer second);
+    @RequestLine("GET /timeout?second={second}")
+    Map<String,Object> timeout(@Param("second") Integer second);
 }

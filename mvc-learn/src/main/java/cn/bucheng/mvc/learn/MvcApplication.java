@@ -19,6 +19,7 @@ package cn.bucheng.mvc.learn;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
@@ -46,7 +47,7 @@ public class MvcApplication {
     }
 
     @RequestMapping("timeout")
-    public Map<String, Object> timeout(Integer second) {
+    public Map<String, Object> timeout(@RequestParam("second") Integer second) {
         try {
             Thread.sleep(second * 1000);
         } catch (InterruptedException e) {
