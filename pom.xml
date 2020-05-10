@@ -30,6 +30,7 @@
         <module>feign-learn</module>
         <module>hystrix-learn</module>
         <module>mvc-learn</module>
+        <module>simple-learn</module>
     </modules>
 
 
