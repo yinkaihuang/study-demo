@@ -9,30 +9,31 @@
         <module name="web-demo" />
         <module name="shared-jbc" />
         <module name="spring-mybatis-demo" />
-        <module name="netty-demo" />
         <module name="mvc-learn" />
         <module name="springboot-shareding-jdbc-much" />
         <module name="webflux-demo" />
-        <module name="lettuce-demo" />
+        <module name="mybatis-learn" />
         <module name="gateway-demo" />
-        <module name="kafka-demo" />
+        <module name="lettuce-learn" />
         <module name="springboot-shared-jdbc" />
         <module name="feign-learn" />
         <module name="simple-learn" />
         <module name="springboot-sharding-much" />
-        <module name="asm-demo" />
+        <module name="apollo-learn" />
+        <module name="druid-learn" />
+        <module name="sentinel-learn" />
+        <module name="asm-learn" />
         <module name="springboot-shareding-much" />
         <module name="hight-es-client" />
         <module name="springboot-apollo" />
         <module name="simple-demo" />
-        <module name="flink-demo" />
+        <module name="flink-learn" />
         <module name="reactive-redis" />
         <module name="springboot-learn" />
         <module name="web-sentinel" />
-        <module name="mybatis-demo" />
-        <module name="druid-demo" />
+        <module name="netty-learn" />
+        <module name="kafka-learn" />
         <module name="hystrix-learn" />
-        <module name="sentinel-demo" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -43,7 +44,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="druid-demo" options="-parameters" />
+      <module name="druid-learn" options="-parameters" />
       <module name="mvc-learn" options="-parameters" />
       <module name="reactive-redis" options="-parameters" />
       <module name="spring-mybatis-demo" options="-parameters" />

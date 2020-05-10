@@ -9,28 +9,29 @@
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>kafka-demo</module>
-        <module>lettuce-demo</module>
-        <module>netty-demo</module>
-        <module>flink-demo</module>
+        <module>kafka-learn</module>
+        <module>lettuce-learn</module>
+        <module>netty-learn</module>
+        <module>flink-learn</module>
         <module>web-sentinel</module>
         <module>gateway-sentinel</module>
-        <module>mybatis-demo</module>
+        <module>mybatis-learn</module>
         <module>shared-jbc</module>
         <module>springboot-shared-jdbc</module>
         <module>springboot-apollo</module>
-        <module>sentinel-demo</module>
+        <module>sentinel-learn</module>
         <module>simple-demo</module>
         <module>webflux-demo</module>
         <module>reactive-redis</module>
-        <module>asm-demo</module>
-        <module>druid-demo</module>
+        <module>asm-learn</module>
+        <module>druid-learn</module>
         <module>hight-es-client</module>
         <module>springboot-learn</module>
         <module>feign-learn</module>
         <module>hystrix-learn</module>
         <module>mvc-learn</module>
         <module>simple-learn</module>
+        <module>apollo-learn</module>
     </modules>
 
 
