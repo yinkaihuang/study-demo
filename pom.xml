@@ -26,6 +26,10 @@
         <module>asm-demo</module>
         <module>druid-demo</module>
         <module>hight-es-client</module>
+        <module>springboot-learn</module>
+        <module>feign-learn</module>
+        <module>hystrix-learn</module>
+        <module>mvc-learn</module>
     </modules>
 
 

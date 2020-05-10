@@ -31,10 +31,7 @@ import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.support.master.AcknowledgedResponse;
 import org.elasticsearch.client.RequestOptions;
-import org.elasticsearch.client.indices.CloseIndexRequest;
-import org.elasticsearch.client.indices.GetIndexTemplatesRequest;
-import org.elasticsearch.client.indices.GetIndexTemplatesResponse;
-import org.elasticsearch.client.indices.PutIndexTemplateRequest;
+import org.elasticsearch.client.indices.*;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -170,6 +167,31 @@ public class HightESTest {
         }
     }
 
+    @Test
+    public void testCreateIndex() {
+        CreateIndexRequest request = new CreateIndexRequest("apm-test");
+        request.source("{\n" +
+                "    \"settings\" : {\n" +
+                "        \"number_of_shards\" : 1,\n" +
+                "        \"number_of_replicas\" : 0\n" +
+                "    },\n" +
+                "    \"mappings\" : {\n" +
+                "        \"properties\" : {\n" +
+                "            \"message\" : { \"type\" : \"text\" }\n" +
+                "        }\n" +
+                "    },\n" +
+                "    \"aliases\" : {\n" +
+                "        \"twitter_alias\" : {}\n" +
+                "    }\n" +
+                "}", XContentType.JSON);
+        try {
+            CreateIndexResponse createIndexResponse = instance.client().indices().create(request, RequestOptions.DEFAULT);
+            System.out.println(createIndexResponse.isAcknowledged());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     /**
      * 删除数据
      */
@@ -227,10 +249,10 @@ public class HightESTest {
     }
 
     @Test
-    public void testAggrSearch(){
+    public void testAggrSearch() {
         SearchSourceBuilder searchBuilder = new SearchSourceBuilder();
         BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery();
-        queryBuilder.must(QueryBuilders.matchQuery("app","ishow-sm-portal"));
+        queryBuilder.must(QueryBuilders.matchQuery("app", "ishow-sm-portal"));
         searchBuilder.query(queryBuilder);
 
         TermsAggregationBuilder termAggr = AggregationBuilders
@@ -270,34 +292,34 @@ public class HightESTest {
         }
     }
 
-    private void parseResponse(SearchResponse response){
+    private void parseResponse(SearchResponse response) {
         Aggregations aggregations = response.getAggregations();
-        if(aggregations==null){
-            return ;
+        if (aggregations == null) {
+            return;
         }
         ParsedStringTerms urlTerm = aggregations.get("url_term");
         List<? extends Terms.Bucket> termBuckets = urlTerm.getBuckets();
-        for(Terms.Bucket termBucket:termBuckets){
-            String url  = termBucket.getKeyAsString();
+        for (Terms.Bucket termBucket : termBuckets) {
+            String url = termBucket.getKeyAsString();
             System.out.println(url);
             Aggregations timeHistogram = termBucket.getAggregations();
-            if(timeHistogram==null){
+            if (timeHistogram == null) {
                 continue;
             }
             ParsedDateHistogram time_histogram = timeHistogram.get("time_histogram");
             List<? extends Histogram.Bucket> timeBuckets = time_histogram.getBuckets();
-            for(Histogram.Bucket timeBucket:timeBuckets){
+            for (Histogram.Bucket timeBucket : timeBuckets) {
                 long time = Long.parseLong(timeBucket.getKeyAsString());
                 Aggregations sumAggr = timeBucket.getAggregations();
                 ParsedSum errorSum = sumAggr.get("error");
                 ParsedSum successSum = sumAggr.get("success");
-                System.out.println(getDateString(time)+" "+errorSum.getValue()+" "+successSum.getValue());
+                System.out.println(getDateString(time) + " " + errorSum.getValue() + " " + successSum.getValue());
             }
         }
     }
 
 
-    private static String getDateString(long time){
+    private static String getDateString(long time) {
         Date date = new Date(time);
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         return format.format(date);

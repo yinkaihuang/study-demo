@@ -1,0 +1,2 @@
+org.springframework.boot.SpringApplicationRunListener=cn.bucheng.boot.learn.listener.TestSpringApplicationListener
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=cn.bucheng.boot.learn.test.TestTwoAutoConfiguration

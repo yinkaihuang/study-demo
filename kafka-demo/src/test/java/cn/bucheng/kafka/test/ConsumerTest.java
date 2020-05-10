@@ -80,4 +80,19 @@ public class ConsumerTest {
             }
         }
     }
+
+    @Test
+    public void testConsumeOffset() {
+        consumer.subscribe(Arrays.asList("__consumer_offsets"));
+        while (true) {
+            ConsumerRecords<String, String> records = consumer.poll(Duration.ofSeconds(1));
+            for (ConsumerRecord<String, String> record : records) {
+                String key = record.key();
+                int partition = record.partition();
+                String value = record.value();
+                System.out.println(key + " " + partition + " " + value);
+                consumer.commitSync();
+            }
+        }
+    }
 }
